@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class Difficulty
 {
@@ -29,6 +30,9 @@ public class Difficulty
 
     public static void ChangeDifficultyByName(String name)
     {
+        Regex re = new Regex("(?:<.*?>)*([^<>]*)(?:<.*?>)*");
+        name = re.Match(name).Groups[1].Captures[0].Value;
+        Debug.Log(name);
         foreach (Difficulty difficulty in difficulties)
         {
             if (difficulty.name.Equals(name))

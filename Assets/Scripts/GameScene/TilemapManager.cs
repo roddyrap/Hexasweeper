@@ -159,6 +159,7 @@ public class TilemapManager : MonoBehaviour
 
     private void End(bool isWin)
     {
+        StatsScript.StopTime();
         FlashingTextScript.statusText.DisplayText(isWin? "Success" : "Game Over", 0.2f, 1);
         // gridGameObject.SetActive(false);
         if (!isWin) DeathReveal();
@@ -358,6 +359,7 @@ internal class Board
     public void InitializeBoard(Vector3Int emptyLocation)
     {
         board = this;
+        StatsScript.StartTime();
         if (GetCellByCoords(emptyLocation) == null) return;
         //
         isInitialized = true;

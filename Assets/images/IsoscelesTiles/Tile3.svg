@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="99.011856"
+   inkscape:export-xdpi="99.011856"
+   inkscape:export-filename="C:\Users\rappa\Unity projects\Hexagonal_MineSweeper\Assets\images\IsoscelesTiles\PNG\Tile3.png"
+   width="441.67255"
+   height="509.99954"
+   viewBox="0 0 116.85919 134.93738"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="Tile3.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="359.79741"
+     inkscape:cy="288.805"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     units="px"
+     inkscape:snap-intersection-paths="false"
+     inkscape:window-width="1541"
+     inkscape:window-height="1030"
+     inkscape:window-x="128"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-9.3037241,-5.41952e-5)">
+    <path
+       sodipodi:type="star"
+       style="fill:none;stroke:#000000;stroke-width:3.453;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path2740"
+       sodipodi:sides="6"
+       sodipodi:cx="67.733322"
+       sodipodi:cy="67.468742"
+       sodipodi:r1="65.475098"
+       sodipodi:r2="56.703102"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="3.46945e-18"
+       inkscape:randomized="0"
+       d="m 124.43642,100.20629 -56.703098,32.73755 -56.703098,-32.73755 0,-65.475097 L 67.733322,1.9936447 124.43642,34.731194 Z" />
+    <path
+       sodipodi:type="star"
+       style="fill:#bfbfbf;fill-opacity:1;stroke:#404040;stroke-width:3.43958;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path2744"
+       sodipodi:sides="6"
+       sodipodi:cx="67.720146"
+       sodipodi:cy="67.733337"
+       sodipodi:r1="61.798328"
+       sodipodi:r2="53.518925"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.0471976"
+       inkscape:flatsided="true"
+       inkscape:rounded="3.46945e-18"
+       inkscape:randomized="0"
+       d="M 121.23907,98.632502 67.720146,129.53167 14.201224,98.632501 l 0,-61.798328 53.518922,-30.899164 53.518924,30.899164 z" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:111.993px;line-height:1.25;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;fill:#ff0000;fill-opacity:1;stroke-width:0.223985"
+       x="34.852684"
+       y="111.52272"
+       id="text2824"><tspan
+         sodipodi:role="line"
+         id="tspan2822"
+         x="34.852684"
+         y="111.52272"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Comfortaa;-inkscape-font-specification:Comfortaa;fill:#ff0000;fill-opacity:1;stroke-width:0.223985">3</tspan></text>
+  </g>
+</svg>

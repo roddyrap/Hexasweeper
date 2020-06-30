@@ -9,10 +9,15 @@ using UnityEngine.UI;
 public class PlayButtonScript : MonoBehaviour
 {
     private PopupScript popup;
+
+    private TMP_Dropdown diffDropdown;
     // Start is called before the first frame update
     void Awake()
     {
         popup = GameObject.Find("Darkener").transform.Find("Popup").GetComponent<PopupScript>();
+        diffDropdown = transform.parent.Find("DifficultyDropdown").GetComponent<TMP_Dropdown>();
+        diffDropdown.value = PlayerPrefs.GetInt("WantedDiff");
+
     }
 
     private void Start()
@@ -31,6 +36,7 @@ public class PlayButtonScript : MonoBehaviour
     public void PlayButton()
     {
         Difficulty.ChangeDifficultyByName(transform.parent.Find("DifficultyDropdown").Find("Label").GetComponent<TextMeshProUGUI>().text);
+        PlayerPrefs.SetInt("WantedDiff", diffDropdown.value);
         SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
     }
 

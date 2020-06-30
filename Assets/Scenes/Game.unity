@@ -473,7 +473,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 239223466}
   m_Enabled: 1
-  m_CellSize: {x: 1, y: 1, z: 0}
+  m_CellSize: {x: 0.8669202, y: 1, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 1
   m_CellSwizzle: 0
@@ -1866,8 +1866,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -880, y: 0.017494}
-  m_SizeDelta: {x: 160, y: 164.03505}
+  m_AnchoredPosition: {x: -864.42, y: 0.034945}
+  m_SizeDelta: {x: 124.80267, y: 143.96094}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1433132613
 MonoBehaviour:
@@ -1954,7 +1954,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4adc153c9c84cd34f8d47f9eda9e1625, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8dc22fdee7f277a4ead7c1767d6a5be8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2135,18 +2135,18 @@ MonoBehaviour:
   padding: {x: 0, y: 0}
   emptyTile: {fileID: 11400000, guid: 67deba3b0adb8ea4492f18cc2cb15f18, type: 2}
   numSprites:
-  - {fileID: 21300000, guid: 9087479b74332fb4c823b7babcace16f, type: 3}
-  - {fileID: 21300000, guid: dfe3b45ab0a2b754dbff45b0c1be29a1, type: 3}
-  - {fileID: 21300000, guid: f3725204c6c185e47930ca38eae294a3, type: 3}
-  - {fileID: 21300000, guid: 040e1aac0975fae49863ca9578321795, type: 3}
-  - {fileID: 21300000, guid: 1bff7ff623552d145b5812b1fb255a25, type: 3}
-  - {fileID: 21300000, guid: 7876a0fa677ec89428e875135dc17dc1, type: 3}
-  - {fileID: 21300000, guid: 1652f573ae84bef45a7ff689293651ea, type: 3}
-  - {fileID: 21300000, guid: 441dfa9d472a1ee499fb54d4375b4787, type: 3}
-  - {fileID: 21300000, guid: 17d15d7a5dbc72f4aa5274756589c14c, type: 3}
-  - {fileID: 21300000, guid: 61b0505f27e0e094aa367f4023e3c4df, type: 3}
-  - {fileID: 21300000, guid: 155e24080b671cb45b994478116c78f7, type: 3}
-  flagSprite: {fileID: 21300000, guid: dbe58715927d2234a8037e4bbac50e2d, type: 3}
+  - {fileID: 21300000, guid: 44b42a38b21d40349b2626fefc03bd2a, type: 3}
+  - {fileID: 21300000, guid: 64a04c2169d90044293792803493d80d, type: 3}
+  - {fileID: 21300000, guid: 03e9c3d392aad82469ffe6241e4f09f8, type: 3}
+  - {fileID: 21300000, guid: 6a786aa396cb1fa4882510eb7cda7360, type: 3}
+  - {fileID: 21300000, guid: 5cada75fb70747f4296a954de17f0d23, type: 3}
+  - {fileID: 21300000, guid: b89c5c6040540ca4d9dafbbfdf1191e3, type: 3}
+  - {fileID: 21300000, guid: b6e971f8695c3094a882a47dc19d05cf, type: 3}
+  - {fileID: 21300000, guid: 282720332d6b8374a8e2c74379f17060, type: 3}
+  - {fileID: 21300000, guid: f21e83538c0483b4992922c1594c240e, type: 3}
+  - {fileID: 21300000, guid: 6522eabf815c93d479363f0a25608372, type: 3}
+  - {fileID: 21300000, guid: d728a83c82a2ef74cabd09fb7358b9cd, type: 3}
+  flagSprite: {fileID: 21300000, guid: f6c7f46a294f9e441b227905cbba9970, type: 3}
   difficultyMeasure: 0
   wantedSize: 10
 --- !u!483693784 &1530526123
