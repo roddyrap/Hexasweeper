@@ -25,6 +25,7 @@ public class SecretScript : MonoBehaviour
         {
             allMiddleClick = true;
             Debug.Log("Secret activated! all mouse buttons now function like a middle click!");
+            FlashingTextScript.statusText.DisplayText("Secret activated! all mouse buttons now function like a middle click!", 0.2f, 2);
         }
     }
 }
