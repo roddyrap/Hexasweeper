@@ -23,7 +23,9 @@ public class TilemapManager : MonoBehaviour
     private GameObject container;
     private GameObject gridGameObject;
     private EndScript endScreen;
+    private GameObject gameStats;
     private Tilemap tilemap;
+    private bool isDead;
 
     public DifficultyMeasure difficultyMeasure;
     public float wantedSize;
@@ -32,12 +34,14 @@ public class TilemapManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        endScreen = GameObject.Find("Canvas").transform.Find("Body").Find("Board").Find("End Screen").gameObject.GetComponent<EndScript>();
+        if (Difficulty.currentDifficulty == null) Difficulty.ChangeDifficultyByName(difficultyMeasure.ToString());
+        endScreen = GameObject.Find("Canvas").transform.Find("Body").transform.Find("Stats").Find("End Screen").gameObject.GetComponent<EndScript>();
+        gameStats = GameObject.Find("StatsText");
+        
     }
 
     void Start()
     {
-        if (Difficulty.currentDifficulty == null) Difficulty.ChangeDifficultyByName(difficultyMeasure.ToString());
         boardSize = Difficulty.currentDifficulty.boardSize;
         bombAmount = Difficulty.currentDifficulty.bombAmount;
         // Getting components
@@ -65,6 +69,7 @@ public class TilemapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDead) return;
         if (Input.GetMouseButtonUp(0))
         {
             LeftClick(WorldToBoardCoords(Input.mousePosition));
@@ -85,7 +90,12 @@ public class TilemapManager : MonoBehaviour
         if (!board.isInitialized) board.InitializeBoard(tileCoords);
         try
         {
-            if (board.IsRevealed(tileCoords) || board.IsFlagged(tileCoords)) return;
+            if ((board.IsRevealed(tileCoords) && !SecretScript.allMiddleClick) || board.IsFlagged(tileCoords)) return;
+            if (board.IsRevealed(tileCoords) && SecretScript.allMiddleClick)
+            {
+                MiddleClick(tileCoords);
+                return;
+            }
             board.SetRevealed(tileCoords);
             if (tileCoords.x < 0 || tileCoords.x > boardSize - 1 || tileCoords.y < 0 || tileCoords.y > boardSize - 1) return;
             int newSpriteIndex = board.bombNumByCellCoords(tileCoords);
@@ -119,7 +129,12 @@ public class TilemapManager : MonoBehaviour
     {
         if (!board.isInitialized) return;
         Tile newTile = Instantiate(emptyTile);
-        if (board.IsRevealed(coords)) return;
+        if (board.IsRevealed(coords) && !SecretScript.allMiddleClick) return;
+        if (board.IsRevealed(coords) && SecretScript.allMiddleClick)
+        {
+            MiddleClick(coords);
+            return;
+        }
         board.ReverseFlagCell(coords);
         if (board.IsFlagged(coords))
         {
@@ -136,6 +151,7 @@ public class TilemapManager : MonoBehaviour
         if (clickedCell.bombsNearby != clickedCell.flagsNearby) return;
         foreach (Cell neighbor in clickedCell.neighbors)
         {
+            if (neighbor.isRevealed) continue;
             LeftClick(board.CellCoords(neighbor));
         }
         if(board.checkWin()) End(true);
@@ -143,14 +159,50 @@ public class TilemapManager : MonoBehaviour
 
     private void End(bool isWin)
     {
-        gridGameObject.SetActive(false);
+        FlashingTextScript.statusText.DisplayText(isWin? "Success" : "Game Over", 0.2f, 1);
+        // gridGameObject.SetActive(false);
+        if (!isWin) DeathReveal();
+        isDead = true;
         endScreen.gameObject.SetActive(true);
+        gameStats.SetActive(false);
         endScreen.End(isWin, DateTime.Now - StatsScript.startTime);
+    }
+
+    private void DeathReveal()
+    {
+        for (int id = 0; id < boardSize * boardSize; id++)
+        {
+            Cell currentCell = board.GetCellById(id);
+            if (currentCell.isRevealed) continue;
+            Tile newTilePlace = Instantiate(emptyTile);
+            int wantedSpriteIndex = 0;
+            if (currentCell.isBomb && currentCell.isFlagged)
+            {
+                wantedSpriteIndex = 9;
+            }
+            else if (currentCell.isBomb)
+            {
+                wantedSpriteIndex = 7;
+            }
+            else if (currentCell.isFlagged)
+            {
+                wantedSpriteIndex = 8;
+            }
+            else
+            {
+                wantedSpriteIndex = currentCell.bombsNearby;
+            }
+
+            newTilePlace.sprite = numSprites[wantedSpriteIndex];
+            tilemap.SetTile(board.CellCoords(currentCell), newTilePlace);
+        }
     }
 
     public void Restart()
     {
+        isDead = false;
         board.Restart();
+        gameStats.SetActive(true);
         for (int cellIndex = 0; cellIndex < Mathf.Pow(boardSize, 2); cellIndex++)
         {
             Tile newTile = Instantiate(emptyTile);
@@ -396,6 +448,39 @@ internal class Board
         }
     }
 
+    public int BombsFlagged()
+    {
+        int bombsFlagged = 0;
+        foreach (Cell cell in cells)
+        {
+            if (cell.isFlagged && cell.isBomb) bombsFlagged++;
+        }
+
+        return bombsFlagged;
+    }
+
+    public int FlagsMisplaced()
+    {
+        int flags = 0;
+        foreach (Cell cell in cells)
+        {
+            if (cell.isFlagged && !cell.isBomb) flags++;
+        }
+
+        return flags;
+    }
+    
+    public int FlagsPlaced()
+    {
+        int flags = 0;
+        foreach (Cell cell in cells)
+        {
+            if (cell.isFlagged) flags++;
+        }
+
+        return flags;
+    }
+
     public void Restart()
     {
         isInitialized = false;
@@ -406,6 +491,11 @@ internal class Board
     {
         if (coords.x > boardSize || coords.x < 0 || coords.y > boardSize || coords.y < 0) return null;
         return cells[coords.x + coords.y * boardSize];
+    }
+
+    public Cell GetCellById(int id)
+    {
+        return cells[id];
     }
     
     public int GetIdByCoords(Vector3Int coords)

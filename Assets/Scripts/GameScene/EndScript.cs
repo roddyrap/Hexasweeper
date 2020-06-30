@@ -10,12 +10,10 @@ public class EndScript : MonoBehaviour
 {
     private TextMeshProUGUI stateText;
     private TextMeshProUGUI endStats;
-    private TextMeshProUGUI highScoreText;
     // Start is called before the first frame update
     private void Awake()
     {
         stateText = transform.Find("State").GetComponent<TextMeshProUGUI>();
-        highScoreText = transform.Find("highScoreText").GetComponent<TextMeshProUGUI>();
         endStats = transform.Find("End Stats").GetComponent<TextMeshProUGUI>();
     }
 
@@ -26,6 +24,7 @@ public class EndScript : MonoBehaviour
 
     public void End(bool isWin, TimeSpan time)
     {
+        Board board = Board.board;
         String diffName = Difficulty.currentDifficulty.name;
         if (isWin)
         {
@@ -35,9 +34,9 @@ public class EndScript : MonoBehaviour
             } 
             else PlayerPrefs.SetString(diffName, StatsScript.FormatDateTime(time));
         }
-        stateText.text = isWin ? "Win" : "Lose";
-        endStats.text = "Time:\n" + StatsScript.FormatDateTime(time) + "\n" + "Current Difficulty:\n" + Difficulty.currentDifficulty.name;
-        highScoreText.text = "High Score:\n" + (PlayerPrefs.GetString(diffName) == ""? "No High score yet!" : PlayerPrefs.GetString(diffName));
+        stateText.text = isWin ? "Success" : "Game Over";
+        endStats.text = "Time:\n" + StatsScript.FormatDateTime(time) + "\n" + (isWin ? "" : "Bombs flagged:\n" + board.BombsFlagged() + " / " + Difficulty.currentDifficulty.bombAmount + "\nFlags Misplaced:\n" + board.FlagsMisplaced() + " / " + board.FlagsPlaced() + "\n") +
+                        "\nHigh Score:\n" + (PlayerPrefs.GetString(diffName) == ""? "No High score yet!" : PlayerPrefs.GetString(diffName));
     }
 
     public static TimeSpan TimeSpanFromString(String timeString)

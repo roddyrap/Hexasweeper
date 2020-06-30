@@ -15,7 +15,7 @@ public class StatsScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        endScreen = transform.parent.parent.Find("Board").Find("End Screen").gameObject;
+        endScreen = transform.parent.Find("End Screen").gameObject;
         instance = this;
         startTime = DateTime.Now;
         text = GetComponent<TextMeshProUGUI>();
@@ -24,7 +24,7 @@ public class StatsScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!endScreen.activeSelf) text.text = "Time:\n" + FormatDateTime(DateTime.Now-startTime) + "\nFlags Left:\n" + (Board.board == null? Difficulty.currentDifficulty.bombAmount : (Difficulty.currentDifficulty.bombAmount - Board.board.flagsOnBoard)) + "\n" + "Current difficulty:\n"+Difficulty.currentDifficulty.name;
+        if (!endScreen.activeSelf) text.text = "Time:\n" + FormatDateTime(DateTime.Now-startTime) + "\nFlags Left:\n" + (Board.board == null? Difficulty.currentDifficulty.bombAmount : (Difficulty.currentDifficulty.bombAmount - Board.board.flagsOnBoard));
     }
 
     public static String FormatDateTime(TimeSpan date)
