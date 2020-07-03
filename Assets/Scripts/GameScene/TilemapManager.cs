@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public enum DifficultyMeasure
 {
     Beginner,
     Intermediate,
-    Expert
+    Expert,
+    Nightmare
 }
 
 public class TilemapManager : MonoBehaviour
@@ -29,8 +32,8 @@ public class TilemapManager : MonoBehaviour
 
     public DifficultyMeasure difficultyMeasure;
     public float wantedSize;
-    private byte boardSize;
-    private byte bombAmount;
+    private short boardSize;
+    private short bombAmount;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -59,16 +62,50 @@ public class TilemapManager : MonoBehaviour
         }
         // Getting offset to make grid fit in screen
         // Setting grid scale, going on a temp one
-        grid.transform.localScale = new Vector3(wantedSize / tilemap.size.x, wantedSize / tilemap.size.x);
+        grid.transform.localScale = new Vector3((wantedSize / tilemap.size.x), (wantedSize / tilemap.size.x));
         // Setting grid midpoint
         Vector2 wantedMidpoint = container.transform.position;
-        gridGameObject.transform.position = new Vector2(wantedMidpoint.x - boardSize*grid.transform.localScale.x / 2f, wantedMidpoint.y - boardSize*grid.transform.localScale.y / 2.9f);
+        Vector2 tileMapSize;
+        Debug.Log(wantedMidpoint);
+        tileMapSize.x = (boardSize + 1) * Mathf.Cos(30 * Mathf.Deg2Rad);
+        if (boardSize % 2 == 1)
+        {
+            tileMapSize.y = Mathf.Ceil(boardSize / 2f) * (0.5f + Mathf.Sin(30 * Mathf.Deg2Rad)) + 0.5f * Mathf.Floor(boardSize/2f);
+
+        }
+        else
+        {
+            tileMapSize.y = (boardSize / 2f) * (0.5f + Mathf.Sin(30 * Mathf.Deg2Rad)) + 0.5f * boardSize/2 + 0.5f *Mathf.Sin(30 * Mathf.Deg2Rad);
+        }
+        gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector2(-Screen.width/1000f, -Screen.height/1000f));
+        gridGameObject.transform.position = new Vector3(gridGameObject.transform.position.x, gridGameObject.transform.position.y, 10);
+        // grid.transform.position = new Vector2(wantedMidpoint.x - tileMapSize.x * grid.transform.localScale.x/2f, wantedMidpoint.y - tileMapSize.y  * grid.transform.localScale.y/2f);
+
         board = new Board(boardSize, bombAmount);
+    }
+
+    private bool IsMouseInPosition()
+    {
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+        List<RaycastResult> raycastResultList = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
+        for (int i = 0; i < raycastResultList.Count; i++)
+        {
+            if (raycastResultList[i].gameObject.GetComponent<AcceptMouseInput>() != null)
+            {
+                raycastResultList.RemoveAt(i);
+                i--;
+            }
+        }
+
+        return raycastResultList.Count <= 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsMouseInPosition()) return;
         if (isDead) return;
         if (Input.GetMouseButtonUp(0))
         {
@@ -87,6 +124,7 @@ public class TilemapManager : MonoBehaviour
 
     private void LeftClick(Vector3Int tileCoords)
     {
+        if (tileCoords.x < 0 || tileCoords.x > boardSize - 1 || tileCoords.y < 0 || tileCoords.y > boardSize - 1) return;
         if (!board.isInitialized) board.InitializeBoard(tileCoords);
         try
         {
@@ -97,7 +135,6 @@ public class TilemapManager : MonoBehaviour
                 return;
             }
             board.SetRevealed(tileCoords);
-            if (tileCoords.x < 0 || tileCoords.x > boardSize - 1 || tileCoords.y < 0 || tileCoords.y > boardSize - 1) return;
             int newSpriteIndex = board.bombNumByCellCoords(tileCoords);
             if (board.IsBomb(tileCoords))
             {
@@ -148,6 +185,7 @@ public class TilemapManager : MonoBehaviour
     {
         if (!board.isInitialized) return;
         Cell clickedCell = board.GetCellByCoords(coords);
+        if (!clickedCell.isRevealed) return;
         if (clickedCell.bombsNearby != clickedCell.flagsNearby) return;
         foreach (Cell neighbor in clickedCell.neighbors)
         {
@@ -201,6 +239,7 @@ public class TilemapManager : MonoBehaviour
 
     public void Restart()
     {
+        StatsScript.StopTime();
         isDead = false;
         board.Restart();
         gameStats.SetActive(true);
@@ -297,7 +336,7 @@ internal class Board
     private int bombAmount;
     public int flagsOnBoard;
 
-    public Board(byte boardSize, byte bombAmount)
+    public Board(short boardSize, short bombAmount)
     {
         this.boardSize = boardSize;
         this.bombAmount = bombAmount;
