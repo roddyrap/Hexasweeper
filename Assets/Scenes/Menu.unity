@@ -2619,7 +2619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuMusic: {fileID: 8300000, guid: 29180d2e39451374582aaf109769a1cf, type: 3}
-  gameMusic: {fileID: 8300000, guid: 13c9c9260efa28343ad1bc26ce6f31fc, type: 3}
+  gameMusic: {fileID: 8300000, guid: 3b2cee90f11641c4c877c225225dcde3, type: 3}
   isPaused: 0
 --- !u!82 &1151183024
 AudioSource:
@@ -2799,7 +2799,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 635654727}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6784296
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3887,7 +3887,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1025674942}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.5
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

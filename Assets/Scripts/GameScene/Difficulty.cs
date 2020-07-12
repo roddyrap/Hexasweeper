@@ -6,12 +6,13 @@ using System.Text.RegularExpressions;
 
 public class Difficulty
 {
+    private static Difficulty Test = new Difficulty(5, 3, 6, "Test", "yellow");
     private static Difficulty Beginner = new Difficulty(15, 27, 0, "Beginner", "green");
     private static Difficulty Intermediate = new Difficulty(24, 80, 1, "Intermediate", "orange");
     private static Difficulty Expert = new Difficulty(35, 180, 2, "Expert", "red");
     private static Difficulty Nightmare = new Difficulty(60, 540, 3, "Nightmare", "blue");
 
-    private static Difficulty[] difficulties = new Difficulty[]{Beginner, Intermediate, Expert, Nightmare};
+    private static Difficulty[] difficulties = new Difficulty[]{Test, Beginner, Intermediate, Expert, Nightmare};
 
     public static Difficulty currentDifficulty;
 

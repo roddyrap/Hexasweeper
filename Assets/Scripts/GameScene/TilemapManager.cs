@@ -1,89 +1,103 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
+// Enum to be able to easily select a difficulty to test in the editor
 public enum DifficultyMeasure
 {
+    Test,
     Beginner,
     Intermediate,
     Expert,
     Nightmare
 }
 
+// Main class, responsible for all tilemap behaviour.
 public class TilemapManager : MonoBehaviour
 {
-    public Vector2 padding;
+    public float doubleClickBuffer;
+    // The prefab of a tile used to change a tile's sprite.
     public Tile emptyTile;
+    // The sprites used in the game
     public Sprite[] numSprites;
+    // The sprite of the flag used, separated from the others for usability purposes
     public Sprite flagSprite;
 
+    // The instance of the board managing script
     private Board board;
+    // The instance of the hexagonal grid
     private Grid grid;
+    // The game object in which the tilemap is in (in UI)
     private GameObject container;
+    // the container of the grid, used to manage the grid's position
     private GameObject gridGameObject;
+    // The script to manage the stats in the end
     private EndScript endScreen;
+    // The script to manage the stats midgame
     private GameObject gameStats;
+    // the Unity tilemap instance connected to the script
     private Tilemap tilemap;
+    // is player dead
     private bool isDead;
 
+    private bool isRightClicking;
+
+    // the difficulty measure used
     public DifficultyMeasure difficultyMeasure;
+    // actual size of the board
     public float wantedSize;
+    // size of one vertex of the board in cells
     private short boardSize;
+    // amount of bombs on board
     private short bombAmount;
-    // Start is called before the first frame update
+    // Initialization of manager
     private void Awake()
     {
+        // If no difficulty from the menu screen, use difficulty selected in the enum.
         if (Difficulty.currentDifficulty == null) Difficulty.ChangeDifficultyByName(difficultyMeasure.ToString());
+        // find the end screen gameobject
         endScreen = GameObject.Find("Canvas").transform.Find("Body").transform.Find("Stats").Find("End Screen").gameObject.GetComponent<EndScript>();
+        // find the game stats gameobject
         gameStats = GameObject.Find("StatsText");
         
     }
 
     void Start()
     {
+        // get board size and amount of bombs from the given difficulty
         boardSize = Difficulty.currentDifficulty.boardSize;
         bombAmount = Difficulty.currentDifficulty.bombAmount;
-        // Getting components
+        // Getting components and gameobjects in scene.
         tilemap = GetComponent<Tilemap>();
         grid = transform.parent.GetComponent<Grid>();
         container = GameObject.Find("Canvas").transform.Find("Body").transform.Find("Board").gameObject;
         gridGameObject = transform.parent.transform.parent.gameObject;
         
-        // Building board cells
+        // Initializing tilemap to be in the given size.
         for (int cellIndex = 0; cellIndex < Mathf.Pow(boardSize, 2); cellIndex++)
         {
             Tile newTile = Instantiate(emptyTile);
-            tilemap.SetTile(new Vector3Int((int)Mathf.Floor(cellIndex / boardSize), cellIndex % boardSize, 0 ), newTile);
+            tilemap.SetTile(new Vector3Int((int)Mathf.Floor(f: cellIndex / boardSize), cellIndex % boardSize, 0 ), newTile);
             newTile.name = cellIndex.ToString();
         }
-        // Getting offset to make grid fit in screen
-        // Setting grid scale, going on a temp one
+        // Setting grid scale to fit wanted size
         grid.transform.localScale = new Vector3((wantedSize / tilemap.size.x), (wantedSize / tilemap.size.x));
         // Setting grid midpoint
-        Vector2 wantedMidpoint = container.transform.position;
-        Vector2 tileMapSize;
-        Debug.Log(wantedMidpoint);
-        tileMapSize.x = (boardSize + 1) * Mathf.Cos(30 * Mathf.Deg2Rad);
-        if (boardSize % 2 == 1)
-        {
-            tileMapSize.y = Mathf.Ceil(boardSize / 2f) * (0.5f + Mathf.Sin(30 * Mathf.Deg2Rad)) + 0.5f * Mathf.Floor(boardSize/2f);
+        // Previous version: gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector2(-Screen.width/1000f, -Screen.height/1000f));
+        // gridGameObject.transform.position = new Vector3(gridGameObject.transform.position.x, gridGameObject.transform.position.y, 10);
+        gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector3(-Screen.width/1000f, -Screen.height/1000f, 10/0.8f));
 
-        }
-        else
-        {
-            tileMapSize.y = (boardSize / 2f) * (0.5f + Mathf.Sin(30 * Mathf.Deg2Rad)) + 0.5f * boardSize/2 + 0.5f *Mathf.Sin(30 * Mathf.Deg2Rad);
-        }
-        gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector2(-Screen.width/1000f, -Screen.height/1000f));
-        gridGameObject.transform.position = new Vector3(gridGameObject.transform.position.x, gridGameObject.transform.position.y, 10);
-        // grid.transform.position = new Vector2(wantedMidpoint.x - tileMapSize.x * grid.transform.localScale.x/2f, wantedMidpoint.y - tileMapSize.y  * grid.transform.localScale.y/2f);
-
+        
+        // creating instance of scripted board
         board = new Board(boardSize, bombAmount);
     }
 
+    
+    // Checking if mouse is inside the UI container to check if to accept mouse input
     private bool IsMouseInPosition()
     {
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
@@ -109,10 +123,11 @@ public class TilemapManager : MonoBehaviour
         if (isDead) return;
         if (Input.GetMouseButtonUp(0))
         {
-            LeftClick(WorldToBoardCoords(Input.mousePosition));
+            StartCoroutine(CheckAndDoDoubleClick(doubleClickBuffer));
         }
         else if (Input.GetMouseButtonUp(1))
         {
+            isRightClicking = true;
             RightClick(WorldToBoardCoords(Input.mousePosition));
         }
         else if (Input.GetMouseButtonUp(2))
@@ -120,6 +135,17 @@ public class TilemapManager : MonoBehaviour
             MiddleClick(WorldToBoardCoords(Input.mousePosition));
         }
         
+    }
+
+    private IEnumerator CheckAndDoDoubleClick(float seconds)
+    {
+        isRightClicking = false;
+        yield return new WaitForSeconds(seconds);
+        if (isRightClicking)
+        {
+            MiddleClick(WorldToBoardCoords(Input.mousePosition));
+        }
+        else LeftClick(WorldToBoardCoords(Input.mousePosition));
     }
 
     private void LeftClick(Vector3Int tileCoords)
@@ -255,7 +281,28 @@ public class TilemapManager : MonoBehaviour
         endScreen.gameObject.SetActive(false);
         StatsScript.startTime = DateTime.Now;
     }
-    
+
+    // WANT: I want neighbors to be highlighted
+    // ISSUES:
+    //    1: 
+    //      I don't want to have to draw and keep highlighted versions of each tile.
+    //    2:
+    //      Recognizing neighbors isn't a problem but recognizing not highlighting might be an issue
+    private void OnMouseOverNotReady()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        Vector3Int inGridLoc = WorldToBoardCoords(mousePos);
+        Cell hoverCell = board.GetCellByCoords(inGridLoc);
+        foreach (Cell neighbor in hoverCell.neighbors)
+        {
+            Tile newTile = Instantiate(emptyTile);
+            Vector3Int cellPos = board.GetCoordsById(neighbor.id);
+            newTile.sprite = null; // Put something here.
+            tilemap.SetTile(cellPos, newTile);
+        }
+        // Unhighlight
+    }
+
 
     public Vector3Int WorldToBoardCoords(Vector3 coords)
     {
@@ -380,7 +427,6 @@ internal class Board
             result[x] = numbersInOrder[randomIndex];
             numbersInOrder.RemoveAt(randomIndex);
         }
-
         return result;
     }
 
@@ -389,7 +435,6 @@ internal class Board
         foreach (Cell cell in cells)
         {
             if (!cell.isRevealed && !cell.isBomb) return false;
-            if (cell.isBomb && !cell.isFlagged) return false;
             if (cell.isFlagged && !cell.isBomb) return false;
         }
         return true;
@@ -532,6 +577,11 @@ internal class Board
     {
         if (coords.x > boardSize || coords.x < 0 || coords.y > boardSize || coords.y < 0) return null;
         return cells[coords.x + coords.y * boardSize];
+    }
+
+    public Vector3Int GetCoordsById(int id)
+    {
+        return new Vector3Int(id/boardSize,id%boardSize,0);
     }
 
     public Cell GetCellById(int id)

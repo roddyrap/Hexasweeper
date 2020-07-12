@@ -38,7 +38,7 @@ public class StatsScript : MonoBehaviour
     {
         if (endScreen.activeSelf) return;
         if (hasTimerStarted) text.text = "Time:\n" + FormatDateTime(DateTime.Now-startTime) + "\nFlags Left:\n" + (Board.board == null? Difficulty.currentDifficulty.bombAmount : (Difficulty.currentDifficulty.bombAmount - Board.board.flagsOnBoard));
-        else text.text = "Time:\nNot started yet!\nFlags Left:\n" + (Board.board == null? Difficulty.currentDifficulty.bombAmount : (Difficulty.currentDifficulty.bombAmount - Board.board.flagsOnBoard));
+        else text.text = "Time:\nNot started yet!\nFlags Left:\n" + (Board.board == null? Difficulty.currentDifficulty.bombAmount : (Difficulty.currentDifficulty.bombAmount - Board.board.flagsOnBoard)) + "\n\nUse the WASD keys to move the board and the scroll wheel to zoom!";
     }
 
     public static String FormatDateTime(TimeSpan date)

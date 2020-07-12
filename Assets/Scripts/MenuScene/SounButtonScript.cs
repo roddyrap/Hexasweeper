@@ -10,21 +10,26 @@ public class SounButtonScript : MonoBehaviour
     public Sprite stopSprite;
     void Start()
     {
-        GetComponent<Button>().onClick.AddListener(MusicManager.instance.ReversePause);
         image = transform.GetChild(0).GetComponent<Image>();
-        if (MusicManager.instance.isPaused)
-        {
-            image.sprite = stopSprite;
+        if(MusicManager.instance != null)
+        { 
+            GetComponent<Button>().onClick.AddListener(MusicManager.instance.ReversePause);
+            Debug.Log("G");
+            if (MusicManager.instance.isPaused)
+            {
+                image.sprite = stopSprite;
+            }
+            else
+            {
+                image.sprite = playSprite;
+            }
         }
-        else
-        {
-            image.sprite = playSprite;
-        }
-        Debug.Log(image.rectTransform.rect.width);
+
     }
     
     void Update()
     {
+        if (MusicManager.instance == null) return;
         if (MusicManager.instance.isPaused)
         {
             image.sprite = stopSprite;
