@@ -86,10 +86,7 @@ public class TilemapManager : MonoBehaviour
         }
         // Setting grid scale to fit wanted size
         grid.transform.localScale = new Vector3((wantedSize / tilemap.size.x), (wantedSize / tilemap.size.x));
-        // Setting grid midpoint
-        // Previous version: gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector2(-Screen.width/1000f, -Screen.height/1000f));
-        // gridGameObject.transform.position = new Vector3(gridGameObject.transform.position.x, gridGameObject.transform.position.y, 10);
-        gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector3(-Screen.width/1000f, -Screen.height/1000f, 10/0.8f));
+        gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector3(-Screen.width/1000f, -Screen.height/1000f, 10/0.8f)); // I don't know why, but it works.
 
         
         // creating instance of scripted board
@@ -119,15 +116,13 @@ public class TilemapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsMouseInPosition()) return;
-        if (isDead) return;
+        if (!IsMouseInPosition() || isDead) return;
         if (Input.GetMouseButtonUp(0))
         {
-            StartCoroutine(CheckAndDoDoubleClick(doubleClickBuffer));
+            LeftClick(WorldToBoardCoords(Input.mousePosition));
         }
         else if (Input.GetMouseButtonUp(1))
         {
-            isRightClicking = true;
             RightClick(WorldToBoardCoords(Input.mousePosition));
         }
         else if (Input.GetMouseButtonUp(2))
@@ -135,17 +130,6 @@ public class TilemapManager : MonoBehaviour
             MiddleClick(WorldToBoardCoords(Input.mousePosition));
         }
         
-    }
-
-    private IEnumerator CheckAndDoDoubleClick(float seconds)
-    {
-        isRightClicking = false;
-        yield return new WaitForSeconds(seconds);
-        if (isRightClicking)
-        {
-            MiddleClick(WorldToBoardCoords(Input.mousePosition));
-        }
-        else LeftClick(WorldToBoardCoords(Input.mousePosition));
     }
 
     private void LeftClick(Vector3Int tileCoords)
@@ -211,11 +195,9 @@ public class TilemapManager : MonoBehaviour
     {
         if (!board.isInitialized) return;
         Cell clickedCell = board.GetCellByCoords(coords);
-        if (!clickedCell.isRevealed) return;
-        if (clickedCell.bombsNearby != clickedCell.flagsNearby) return;
-        foreach (Cell neighbor in clickedCell.neighbors)
+        if (!clickedCell.isRevealed || clickedCell.bombsNearby != clickedCell.flagsNearby) return;
+        foreach (Cell neighbor in clickedCell.neighbors.Where(neighbor => !neighbor.isRevealed))
         {
-            if (neighbor.isRevealed) continue;
             LeftClick(board.CellCoords(neighbor));
         }
         if(board.checkWin()) End(true);
@@ -281,28 +263,6 @@ public class TilemapManager : MonoBehaviour
         endScreen.gameObject.SetActive(false);
         StatsScript.startTime = DateTime.Now;
     }
-
-    // WANT: I want neighbors to be highlighted
-    // ISSUES:
-    //    1: 
-    //      I don't want to have to draw and keep highlighted versions of each tile.
-    //    2:
-    //      Recognizing neighbors isn't a problem but recognizing not highlighting might be an issue
-    private void OnMouseOverNotReady()
-    {
-        Vector2 mousePos = Input.mousePosition;
-        Vector3Int inGridLoc = WorldToBoardCoords(mousePos);
-        Cell hoverCell = board.GetCellByCoords(inGridLoc);
-        foreach (Cell neighbor in hoverCell.neighbors)
-        {
-            Tile newTile = Instantiate(emptyTile);
-            Vector3Int cellPos = board.GetCoordsById(neighbor.id);
-            newTile.sprite = null; // Put something here.
-            tilemap.SetTile(cellPos, newTile);
-        }
-        // Unhighlight
-    }
-
 
     public Vector3Int WorldToBoardCoords(Vector3 coords)
     {
@@ -494,7 +454,7 @@ internal class Board
         }
     }
     
-    public void InitializeBoard()
+    public void InitializeBoard() // For before first click
     {
         // Amount of cells needed
         int cellAmount = (int)Mathf.Pow(boardSize, 2);

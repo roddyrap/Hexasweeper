@@ -47,7 +47,7 @@ public class CameraScript : MonoBehaviour
         // {
         //     transform.position = new Vector3(transform.position.x  + movementSpeed, transform.position.y);
         // }
-        transform.position = new Vector3(transform.position.x + Input.GetAxis("Horizontal") * zoomSpeed, transform.position.y + Input.GetAxis("Vertical") * zoomSpeed);
+        transform.position = new Vector3(transform.position.x + Input.GetAxisRaw("Horizontal") * zoomSpeed, transform.position.y + Input.GetAxisRaw("Vertical") * zoomSpeed);
     }
 
     private void Update()
