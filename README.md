@@ -1,5 +1,5 @@
 # <img src="./Assets/images/Logo/1/Logo1.png" alt="Logo" width=30> Hexagonal MineSweeper
- 
+ [Link to the game](https://www.kongregate.com/games/Roddy142/hexasweeper)
 ## Controls
 Zoom with the scroll wheel or the + and - keys.  
 Move the board with the arrows or the WASD keys.  
