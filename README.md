@@ -1,4 +1,4 @@
-# <img src="./Assets/images/Logo/1/Logo1.png" alt="Logo" width=30> Hexagonal MineSweeper
+# <img src="./Assets/images/Logo/3/3.png" alt="Logo" width=30> Hexagonal MineSweeper
  [Link to the game](https://www.kongregate.com/games/Roddy142/hexasweeper)
 ## Controls
 Zoom with the scroll wheel or the + and - keys.  
@@ -19,7 +19,7 @@ The location of most mines is discovered through a logical process, but some req
 
 Clicking on a tile will reveal what is hidden underneath it. If a tile has no bombs near it (marked as a tile without a number when revealed) all adjacent tiles to it will also automatically be revealed. This can trigger a chain reaction of empty tiles that are being revealed together.
 other tiles contain numbers (from 1 to 6), with each number being the number of mines adjacent to the uncovered tile.  
-<img src="./Assets/images/IsoscelesTiles/PNG/revealedTile.png" alt="Tile with 0 bombs near" width=40>
+<img src="./Assets/images/IsoscelesTiles/PNG/RevealedTile.png" alt="Tile with 0 bombs near" width=40>
 <img src="./Assets/images/IsoscelesTiles/PNG/Tile1.png" alt="Tile with 1 bomb near" width=40>
 <img src="./Assets/images/IsoscelesTiles/PNG/Tile2.png" alt="Tile with 2 bombs near" width=40>
 <img src="./Assets/images/IsoscelesTiles/PNG/Tile3.png" alt="Tile with 3 bombs near" width=40>
