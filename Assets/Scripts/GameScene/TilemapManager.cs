@@ -85,10 +85,11 @@ public class TilemapManager : MonoBehaviour
             newTile.name = cellIndex.ToString();
         }
         // Setting grid scale to fit wanted size
+        // Horrible but working way:
         grid.transform.localScale = new Vector3((wantedSize / tilemap.size.x), (wantedSize / tilemap.size.x));
         gridGameObject.transform.position = 0.8f * Camera.main.ScreenToWorldPoint(new Vector3(-Screen.width/1000f, -Screen.height/1000f, 10/0.8f)); // I don't know why, but it works.
 
-        
+
         // creating instance of scripted board
         board = new Board(boardSize, bombAmount);
     }

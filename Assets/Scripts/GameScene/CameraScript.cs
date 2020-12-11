@@ -8,6 +8,7 @@ public class CameraScript : MonoBehaviour
     private Camera cam;
 
     public float movementSpeed;
+    public float zoomModifier;
     public float zoomSpeed;
     public float mouseWheelMultiplier;
     private float regOrthoSize;
@@ -30,24 +31,8 @@ public class CameraScript : MonoBehaviour
             else cam.orthographicSize -= zoomSpeed;
         if(Input.GetKey(KeyCode.Minus))
             cam.orthographicSize += zoomSpeed;
-        // if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-        // {
-        //     transform.position = new Vector3(transform.position.x, transform.position.y + movementSpeed);
-        // }
-        // if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        // {
-        //     transform.position = new Vector3(transform.position.x, transform.position.y - movementSpeed);
-        //     
-        // }
-        // if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        // {
-        //     transform.position = new Vector3(transform.position.x - movementSpeed, transform.position.y);
-        // }
-        // if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        // {
-        //     transform.position = new Vector3(transform.position.x  + movementSpeed, transform.position.y);
-        // }
-        transform.position = new Vector3(transform.position.x + Input.GetAxisRaw("Horizontal") * zoomSpeed, transform.position.y + Input.GetAxisRaw("Vertical") * zoomSpeed);
+        float basicSpeed = movementSpeed;
+        transform.position = new Vector3(transform.position.x + Input.GetAxisRaw("Horizontal") * (basicSpeed + zoomModifier * cam.orthographicSize / regOrthoSize), transform.position.y + Input.GetAxisRaw("Vertical") * (basicSpeed + zoomModifier * cam.orthographicSize / regOrthoSize));
     }
 
     private void Update()
