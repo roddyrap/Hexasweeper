@@ -118,59 +118,57 @@ public class TilemapManager : MonoBehaviour
     void Update()
     {
         if (!IsMouseInPosition() || isDead) return;
+
+        Vector3Int mouseTile = WorldToBoardCoords(Input.mousePosition);
+        if (board.GetCellByCoords(mouseTile) == null) return;
+
         if (Input.GetMouseButtonUp(0))
         {
-            LeftClick(WorldToBoardCoords(Input.mousePosition));
+            LeftClick(mouseTile);
         }
         else if (Input.GetMouseButtonUp(1))
         {
-            RightClick(WorldToBoardCoords(Input.mousePosition));
+            RightClick(mouseTile);
         }
         else if (Input.GetMouseButtonUp(2))
         {
-            MiddleClick(WorldToBoardCoords(Input.mousePosition));
+            MiddleClick(mouseTile);
         }
         
     }
 
     private void LeftClick(Vector3Int tileCoords)
     {
-        if (tileCoords.x < 0 || tileCoords.x > boardSize - 1 || tileCoords.y < 0 || tileCoords.y > boardSize - 1) return;
         if (!board.isInitialized) board.InitializeBoard(tileCoords);
-        try
-        {
-            if ((board.IsRevealed(tileCoords) && !SecretScript.allMiddleClick) || board.IsFlagged(tileCoords)) return;
-            if (board.IsRevealed(tileCoords) && SecretScript.allMiddleClick)
-            {
-                MiddleClick(tileCoords);
-                return;
-            }
-            board.SetRevealed(tileCoords);
-            int newSpriteIndex = board.bombNumByCellCoords(tileCoords);
-            if (board.IsBomb(tileCoords))
-            {
-                newSpriteIndex = numSprites.Length - 1;
-                End(false);
-            }
 
-            if (newSpriteIndex == 0)
-            {
-                foreach (Cell neighbor in board.GetNeighbors(tileCoords))
-                {
-                    if (neighbor.isRevealed) continue;
-                    LeftClick(board.CellCoords(neighbor));
-                }
-            }
-
-            Tile newTile = Instantiate(emptyTile);
-            newTile.sprite = numSprites[newSpriteIndex];
-            tilemap.SetTile(tileCoords, newTile);
-            if(board.checkWin()) End(true);
-        }
-        catch (NullReferenceException)
+        if ((board.IsRevealed(tileCoords) && !SecretScript.allMiddleClick) || board.IsFlagged(tileCoords)) return;
+        if (board.IsRevealed(tileCoords) && SecretScript.allMiddleClick)
         {
+            MiddleClick(tileCoords);
             return;
         }
+
+        board.SetRevealed(tileCoords);
+        int newSpriteIndex = board.bombNumByCellCoords(tileCoords);
+        if (board.IsBomb(tileCoords))
+        {
+            newSpriteIndex = numSprites.Length - 1;
+            End(false);
+        }
+
+        if (newSpriteIndex == 0)
+        {
+            foreach (Cell neighbor in board.GetNeighbors(tileCoords))
+            {
+                if (neighbor.isRevealed) continue;
+                LeftClick(board.CellCoords(neighbor));
+            }
+        }
+
+        Tile newTile = Instantiate(emptyTile);
+        newTile.sprite = numSprites[newSpriteIndex];
+        tilemap.SetTile(tileCoords, newTile);
+        if(board.checkWin()) End(true);
     }
 
     private void RightClick(Vector3Int coords)
@@ -536,7 +534,7 @@ internal class Board
 
     public Cell GetCellByCoords(Vector3Int coords)
     {
-        if (coords.x > boardSize || coords.x < 0 || coords.y > boardSize || coords.y < 0) return null;
+        if (coords.x >= boardSize || coords.x < 0 || coords.y >= boardSize || coords.y < 0) return null;
         return cells[coords.x + coords.y * boardSize];
     }
 
