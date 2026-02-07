@@ -60,7 +60,7 @@ public class PlayButtonScript : MonoBehaviour
     {
         popup.gameObject.transform.parent.gameObject.SetActive(true);
         popup.SetTitle("Credits:");
-        popup.SetContent("Developed by:\nNimrod Rappaport" +
+        popup.SetContent("Developed by:\nRdddy Rappaport" +
                          "\n\nArt:\nFlag By Font Awesome by Dave Gandy - https://fortawesome.github.com/Font-Awesome, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=24230921" + 
                          "\n\nMusic:\nLuminist - Plastic Sea (Korg Volca Keys + MS20 Mini).\nChad Crouch - Algorithms.");
     }
