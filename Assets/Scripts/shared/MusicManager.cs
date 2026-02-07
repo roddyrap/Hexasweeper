@@ -9,9 +9,17 @@ using Random = UnityEngine.Random;
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager instance;
+
     public AudioClip menuMusic;
 
+    [Range(0.0f, 1.0f)]
+    public float menuMusicVolume = 1.0f;
+
     public AudioClip gameMusic;
+
+    [Range(0.0f, 1.0f)]
+    public float gameMusicVolume = 1.0f;
+
 
     private AudioSource source;
 
@@ -35,8 +43,17 @@ public class MusicManager : MonoBehaviour
     
     private void SwitchScene(Scene oldScene, Scene newScene)
     {
-        if (newScene.name == "Menu") source.clip = menuMusic;
-        else source.clip = gameMusic;
+        if (newScene.name == "Menu")
+        {
+            source.clip = menuMusic;
+            source.volume = menuMusicVolume;
+        }
+        else
+        {
+            source.clip = gameMusic;
+            source.volume = gameMusicVolume;
+        }
+
         if(!isPaused) source.Play();
     }
 
