@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unity.PlayerPrefsEditor.Editor.csproj" />
+  <Project Path="Unity.2D.Tilemap.Extras.csproj" />
+  <Project Path="Unity.2D.Tilemap.Extras.Placeholder.EditorTests.csproj" />
+  <Project Path="Unity.2D.Tilemap.Extras.Editor.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Unity.PlayerPrefsEditor.EditorResources.csproj" />
+  <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
+  <Project Path="Unity.PlayerPrefsEditor.Samples.SampleScene.csproj" />
+</Solution>
