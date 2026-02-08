@@ -18,7 +18,6 @@ public class PopupScript : MonoBehaviour
     {
         darkener = transform.parent.gameObject;
         title = transform.Find("PopupTitle").GetComponent<TextMeshProUGUI>();
-        Debug.Log(title);
         content = transform.Find("Scroll View").Find("Viewport").Find("Content").GetComponent<TextMeshProUGUI>();
         sr = transform.Find("Scroll View").GetComponent<ScrollRect>();
         csf = content.gameObject.GetComponent<ContentSizeFitter>();

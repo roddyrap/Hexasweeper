@@ -35,7 +35,6 @@ public class Difficulty
     {
         Regex re = new Regex("(?:<.*?>)*([^<>]*)(?:<.*?>)*");
         name = re.Match(name).Groups[1].Captures[0].Value;
-        Debug.Log(name);
         foreach (Difficulty difficulty in difficulties)
         {
             if (difficulty.name.Equals(name))

@@ -14,7 +14,6 @@ public class SounButtonScript : MonoBehaviour
         if(MusicManager.instance != null)
         { 
             GetComponent<Button>().onClick.AddListener(MusicManager.instance.ReversePause);
-            Debug.Log("G");
             if (MusicManager.instance.isPaused)
             {
                 image.sprite = stopSprite;
